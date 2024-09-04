@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Playwright Home page: ', () => {
   test('Menu Navigation in Header', async ({ page }) => {
     //step 1 > go to docs
-    await page.getByRole('link', { name: 'Docs' }).click();
+    await page.locator('a.navbar__item.navbar__link[href="/docs/intro"]').click();
     await expect(
       page.getByRole('button', { name: 'Getting Started' })
     ).toBeVisible();
@@ -76,16 +76,12 @@ test.describe('Playwright Home page: ', () => {
     await expect(page.locator('h1')).toContainText('API testing');
   });
 
-  test.skip('Some', async ({ page }) => {
-    await page.getByLabel('Search').click();
-    await page.getByPlaceholder('Search docs').fill('api test');
-    await expect(
-      page.getByRole('link', { name: 'API testing', exact: true })
-    ).toBeVisible();
-    await expect(page.locator('#docsearch-item-0')).toContainText(
-      'API testing'
-    );
-    await page.getByRole('link', { name: 'API testing', exact: true }).click();
-    await expect(page.locator('h1')).toContainText('API testing');
+  test('Sidebar navigation', async ({ page }) => {
+    await page.getByRole('link', { name: 'Get started' }).click();
+    await page.getByRole('button', { name: 'Playwright Test' }).click();
+    await page.getByRole('link', { name: 'Test configuration' }).click();
+    await page.getByRole('link', { name: 'Expect Options', exact: true }).click();
+    await page.getByRole('link', { name: 'Next Test use options »' }).click();
+    await expect(page.locator('h1')).toContainText('Test use options');
   });
 });
