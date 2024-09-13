@@ -1,8 +1,9 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
+//Main Menu Page Locators
 export const getCoffeeLocators = (page: Page) => {
-  //
-  const getCoffeeLocator = (coffeeName: string, page: Page) => {
+  //Locators generator
+  const getCoffeeLocator = (coffeeName: string, page: Page): Locator => {
     return page.locator(
       `//*[@aria-label="${coffeeName}" and contains(@class, 'cup-body')]`
     );
@@ -25,10 +26,11 @@ export const getCoffeeLocators = (page: Page) => {
     paymentForm: page.locator('[aria-label="Payment form"]'),
     name: page.locator('input[name=name][id=name]'),
     email: page.locator('input[name=email][id=email]'),
+    promotionCheckbox: page.locator('input[name=promotion][id=promotion]'),
     submitPayment: page.locator('button[id="submit-payment"][type=submit]'),
 
     //promotion form
-    promotion: page.locator('input[name=promotion][id=promotion]'),
+
     promotionButtonYes: page.locator(
       `//*[@class='buttons']/button[@class='yes']`
     ),
@@ -54,24 +56,7 @@ export const getCoffeeLocators = (page: Page) => {
   };
 };
 
-// export const addNamedCoffeeLocator = (
-//   coffeeName: string,
-//   page: Page
-// ): Locator => {
-//   return page.locator(
-//     `//*[@class="unit-controller"]/*[@aria-label="Add one ${coffeeName}"]`
-//   );
-// };
-
-// export const removeNamedCoffeeLocator = (
-//   coffeeName: string,
-//   page: Page
-// ): Locator => {
-//   return page.locator(
-//     `//*[@class="unit-controller"]/*[@aria-label="Remove one ${coffeeName}"]`
-//   );
-// };
-
+//Cart Page Locators
 export function cartPageLocators(page: Page) {
   return {
     cartPageButton: page.locator('//*[@aria-label="Cart page"]'),

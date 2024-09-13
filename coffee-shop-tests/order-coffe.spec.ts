@@ -1,13 +1,23 @@
-import { expect, Locator, test } from '@playwright/test';
+import { faker } from '@faker-js/faker';
+import { expect, test } from '@playwright/test';
 import { clickFewTimes } from './helpers';
-import {
-  addNamedCoffeeLocator,
-  cartPageLocators,
-  getCoffeeLocators,
-} from './locators';
+import { cartPageLocators, getCoffeeLocators } from './locators';
 
 let menu: ReturnType<typeof getCoffeeLocators>;
 let cart: ReturnType<typeof cartPageLocators>;
+let coffeeNamesList = [
+  'Espresso',
+  'Espresso Macchiato',
+  'Cappuccino',
+  'Mocha',
+  'Flat White',
+  'Americano',
+  'Cafe Latte',
+  'Espresso Con Panna',
+  'Cafe Breve',
+];
+let userName = faker.internet.userName();
+let userEmail = faker.internet.email();
 test.beforeEach(async ({ page }) => {
   await page.goto('https://coffee-cart.app');
   menu = getCoffeeLocators(page);
@@ -16,90 +26,48 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Order new coffee: ', () => {
   test('ISCS-1 - Order espresso', async ({ page }) => {
-    const emailField: Locator = page.locator('input[name=email][id=email]');
-    await expect(menu.espresso).toBeVisible();
-
-    await page
-      .locator('.cup-body[aria-label=Espresso][data-test=Espresso]')
-      .click();
-    await page
-      .locator('button[aria-label="Proceed to checkout"][data-test=checkout]')
-      .click();
-
-    await expect(page.locator('[aria-label="Payment form"]')).toBeVisible();
-    await page.locator('input[name=name][id=name]').fill('bob');
-    await emailField.fill('bob@marley.com');
-    await page.locator('input[name=promotion][id=promotion]').check();
-    await page.locator('button[id="submit-payment"][type=submit]').click();
-    await expect(page.locator('.snackbar.success[role=button]')).toBeVisible();
+    await expect.soft(menu.espresso).toBeVisible();
+    await menu.espresso.click();
+    await menu.checkoutButton.click();
+    await expect(menu.paymentForm).toBeVisible();
+    await menu.name.fill(userName);
+    await menu.email.fill(userEmail);
+    await menu.promotionCheckbox.check();
+    await menu.submitPayment.click();
+    await expect(menu.successSnackbar).toBeVisible();
   });
 
   test('ISCS-2 - Order all coffee', async ({ page }) => {
-    await page.locator('[data-test="Espresso"]').click();
-    await page.locator('[data-test="Espresso_Macchiato"]').click();
-    await page.locator('[data-test="Cappuccino"]').click();
-    await page.locator('[data-test="Mocha"]').click();
-    await page.locator('[data-test="Flat_White"]').click();
-    await page.locator('[data-test="Americano"]').click();
-    await page.locator('[data-test="Cafe_Latte"]').click();
-    await page.locator('[data-test="Espresso_Con Panna"]').click();
-    await page.locator('[data-test="Cafe_Breve"]').click();
-    await page.locator('[aria-label="Cart page"]').click();
-    await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Americano"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Cafe Breve"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Cafe Latte"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Cappuccino"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Espresso"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Espresso Con Panna"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Espresso Macchiato"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Flat White"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await expect(
-      page.locator(
-        '.list-item button[aria-label="Add one Mocha"][type="button"]:visible'
-      )
-    ).toBeVisible();
-    await page.locator('[data-test="checkout"]').click();
-    await expect(page.locator('form[aria-label="Payment form"]')).toBeVisible();
-    await page.locator('#name').fill('bobo');
-    await page.locator('#email').fill('bob@explain.com');
-    await page.locator('#promotion').check();
-    await page.locator('#submit-payment').click();
-    await expect(
-      page.locator('.snackbar.success[role="button"]')
-    ).toBeVisible();
+    let coffeeList = [
+      'espresso',
+      'espressoMacchiato',
+      'cappuccino',
+      'mocha',
+      'flatWhite',
+      'americano',
+      'cafeLatte',
+      'espressoConPanna',
+      'cafeBreve',
+    ];
+    for (let coffee of coffeeList) {
+      await menu[coffee].click();
+    }
+
+    await cart.cartPageButton.click();
+
+    await expect(menu.checkoutButton).toBeVisible();
+
+    for (let coffee of coffeeNamesList) {
+      await expect(cart.addCoffeeButtonCart(coffee)).toBeVisible();
+    }
+
+    await menu.checkoutButton.click();
+    await expect(menu.paymentForm).toBeVisible();
+    await menu.name.fill(userName);
+    await menu.email.fill(userEmail);
+    await menu.promotionCheckbox.check();
+    await menu.submitPayment.click();
+    await expect(menu.successSnackbar).toBeVisible();
   });
 
   test('ISCS-3 - Ordering two espresso via hover on checkout button', async ({
@@ -168,9 +136,7 @@ test.describe('Order new coffee: ', () => {
     await expect(menu.promotionButtonYes).toBeVisible();
     await menu.promotionButtonYes.click();
     await menu.checkoutButton.hover();
-    await expect(
-      menu.addNamedCoffee('(Discounted) Mocha')
-    ).toBeVisible();
+    await expect(menu.addNamedCoffee('(Discounted) Mocha')).toBeVisible();
     await cart.cartPageButton.click();
     await expect(cart.addCoffeeButtonCart('(Discounted) Mocha')).toBeVisible();
     await expect(
