@@ -1,15 +1,23 @@
 import { expect, Locator, test } from '@playwright/test';
+import { clickFewTimes } from './helpers';
+import {
+  addNamedCoffeeLocator,
+  cartPageLocators,
+  getCoffeeLocators,
+} from './locators';
 
+let menu: ReturnType<typeof getCoffeeLocators>;
+let cart: ReturnType<typeof cartPageLocators>;
 test.beforeEach(async ({ page }) => {
   await page.goto('https://coffee-cart.app');
+  menu = getCoffeeLocators(page);
+  cart = cartPageLocators(page);
 });
 
 test.describe('Order new coffee: ', () => {
   test('ISCS-1 - Order espresso', async ({ page }) => {
     const emailField: Locator = page.locator('input[name=email][id=email]');
-    await expect(
-      page.locator('.cup-body[aria-label=Espresso][data-test=Espresso]')
-    ).toBeVisible();
+    await expect(menu.espresso).toBeVisible();
 
     await page
       .locator('.cup-body[aria-label=Espresso][data-test=Espresso]')
@@ -94,7 +102,9 @@ test.describe('Order new coffee: ', () => {
     ).toBeVisible();
   });
 
-  test('ISCS-3 - Order 2 espresso via hover', async ({ page }) => {
+  test('ISCS-3 - Ordering two espresso via hover on checkout button', async ({
+    page,
+  }) => {
     await page.locator('[data-test="Espresso"]').click();
     await expect(page.locator('[data-test="checkout"]')).toBeVisible();
     await expect(page.locator('[data-test="checkout"]')).toContainText(
@@ -102,68 +112,69 @@ test.describe('Order new coffee: ', () => {
     );
     await page.locator('[data-test="checkout"]').hover();
     await expect(
-      page.locator('ul').filter({ hasText: 'Espresso x 1+-' })
+      page.locator(
+        '//*[@class="unit-controller"]/button[@aria-label="Add one Espresso"]'
+      )
     ).toBeVisible();
-    await expect(page.locator('#app')).toContainText('Espresso');
-    await page.getByLabel('Add one Espresso').click();
+    await page
+      .locator(
+        '//*[@class="unit-controller"]/*[@aria-label="Add one Espresso"]'
+      )
+      .click();
     await expect(page.locator('[data-test="checkout"]')).toContainText(
       'Total: $20.00'
     );
     await page.locator('[data-test="checkout"]').click();
-    await expect(page.getByText('Payment details×We will send')).toBeVisible();
-    await expect(page.locator('h1')).toContainText('Payment details');
+    await expect(
+      page.locator('//form[@aria-label="Payment form"]')
+    ).toBeVisible();
   });
 
   test('ISCS-4 - Right click on Mocha', async ({ page }) => {
     await page.locator('[data-test="Mocha"]').click({
       button: 'right',
     });
-    await expect(page.getByRole('button', { name: 'Yes' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'No' })).toBeVisible();
-    await page.getByRole('button', { name: 'Yes' }).click();
+    await expect(
+      page.locator('//dialog[@data-cy="add-to-cart-modal"]')
+    ).toBeVisible();
+    await page
+      .locator(`//*[@method='dialog']/button[contains(text(), 'Yes')]`)
+      .click();
     await expect(page.locator('[data-test="checkout"]')).toContainText(
       'Total: $8.00'
     );
     await page.locator('[data-test="Mocha"]').click({
       button: 'right',
     });
-    await page.getByRole('button', { name: 'No' }).click();
-    await expect(page.locator('[data-test="checkout"]')).toContainText(
-      'Total: $8.00'
-    );
+    await page
+      .locator(`//*[@method='dialog']/button[contains(text(), 'No')]`)
+      .click();
+    await expect(
+      page.locator(
+        `//*[@data-test="checkout" and contains(text(), 'Total: $8.00')]`
+      )
+    ).toBeVisible();
   });
 
   test('ISCS-5 - Promo Message', async ({ page }) => {
-    await page.locator('[data-test="Cappuccino"]').click();
-    await page.locator('[data-test="Cappuccino"]').click();
-    await page.locator('[data-test="Cappuccino"]').click();
+    await clickFewTimes(menu.cappuccino, 3, page);
+    await expect(menu.discountedMocha).toBeVisible();
+    await expect(menu.promotionButtonNo).toBeVisible();
+    await expect(menu.promotionButtonYes).toBeVisible();
+    await menu.promotionButtonNo.click();
+    await menu.checkoutButton.hover();
+    await expect(menu.addNamedCoffee('Cappuccino')).toBeVisible();
+    await clickFewTimes(menu.mocha, 3, page);
+    await expect(menu.promotionButtonYes).toBeVisible();
+    await menu.promotionButtonYes.click();
+    await menu.checkoutButton.hover();
     await expect(
-      page.getByText(
-        "It's your lucky day! Get an extra cup of Mocha for $4.espressochocolate"
-      )
+      menu.addNamedCoffee('(Discounted) Mocha')
     ).toBeVisible();
+    await cart.cartPageButton.click();
+    await expect(cart.addCoffeeButtonCart('(Discounted) Mocha')).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Yes, of course!' })
+      cart.removeCoffeeButtonCart('(Discounted) Mocha')
     ).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: "Nah, I'll skip." })
-    ).toBeVisible();
-    await page.getByRole('button', { name: "Nah, I'll skip." }).click();
-    await page.locator('[data-test="checkout"]').hover();
-    await expect(
-      page.locator('ul').filter({ hasText: 'Cappuccino x 3+-' })
-    ).toBeVisible();
-    await expect(page.locator('#app')).toContainText('Cappuccino x 3+-');
-    await page.locator('[data-test="Mocha"]').click();
-    await page.locator('[data-test="Mocha"]').click();
-    await page.locator('[data-test="Mocha"]').click();
-    await expect(
-      page.getByRole('button', { name: 'Yes, of course!' })
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Yes, of course!' }).click();
-    await page.locator('[data-test="checkout"]').hover();
-    await expect(page.locator('#app')).toContainText('(Discounted) Mocha');
-    await page.getByLabel('Cart page').click();
-    await expect(page.locator('#app')).toContainText('(Discounted) Mocha');
   });
 });

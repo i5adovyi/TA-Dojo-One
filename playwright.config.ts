@@ -34,18 +34,27 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'Coffee Cart',
       use: { ...devices['Desktop Chrome'] },
+      testDir: 'coffee-shop-tests',
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'Playwright Dev',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: 'playwright-dev-tests',
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'WebdriverIO Learning',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: 'learn-webdriverio-tests',
+    },
+
+    {
+      name: 'General',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: 'tests',
     },
 
     /* Test against mobile viewports. */
