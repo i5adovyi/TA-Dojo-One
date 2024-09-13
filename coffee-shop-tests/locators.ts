@@ -30,7 +30,6 @@ export const getCoffeeLocators = (page: Page) => {
     submitPayment: page.locator('button[id="submit-payment"][type=submit]'),
 
     //promotion form
-
     promotionButtonYes: page.locator(
       `//*[@class='buttons']/button[@class='yes']`
     ),
@@ -53,6 +52,11 @@ export const getCoffeeLocators = (page: Page) => {
     },
     //Success bar
     successSnackbar: page.locator('.snackbar.success[role=button]'),
+
+    //Context menu
+    addToCartModal: page.locator('//dialog[@data-cy="add-to-cart-modal"]'),
+    modalButtonYes: page.locator(`//*[@method='dialog']/button[1]`),
+    modalButtonNo: page.locator(`//*[@method='dialog']/button[2]`),
   };
 };
 

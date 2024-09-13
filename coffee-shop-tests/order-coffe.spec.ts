@@ -99,29 +99,17 @@ test.describe('Order new coffee: ', () => {
   });
 
   test('ISCS-4 - Right click on Mocha', async ({ page }) => {
-    await page.locator('[data-test="Mocha"]').click({
+    await menu.mocha.click({
       button: 'right',
     });
-    await expect(
-      page.locator('//dialog[@data-cy="add-to-cart-modal"]')
-    ).toBeVisible();
-    await page
-      .locator(`//*[@method='dialog']/button[contains(text(), 'Yes')]`)
-      .click();
-    await expect(page.locator('[data-test="checkout"]')).toContainText(
-      'Total: $8.00'
-    );
-    await page.locator('[data-test="Mocha"]').click({
+    await expect(menu.addToCartModal).toBeVisible();
+    await menu.modalButtonYes.click();
+    await expect(menu.checkoutButton).toContainText('Total: $8.00');
+    await menu.mocha.click({
       button: 'right',
     });
-    await page
-      .locator(`//*[@method='dialog']/button[contains(text(), 'No')]`)
-      .click();
-    await expect(
-      page.locator(
-        `//*[@data-test="checkout" and contains(text(), 'Total: $8.00')]`
-      )
-    ).toBeVisible();
+    await menu.modalButtonNo.click();
+    await expect(menu.checkoutButton).toContainText('Total: $8.00');
   });
 
   test('ISCS-5 - Promo Message', async ({ page }) => {
