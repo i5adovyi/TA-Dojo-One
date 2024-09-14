@@ -29,7 +29,7 @@ test.describe('Order new coffee: ', () => {
     await expect.soft(menu.espresso).toBeVisible();
     await menu.espresso.click();
     await menu.checkoutButton.click();
-    await expect(menu.paymentForm).toBeVisible();
+    await expect.soft(menu.paymentForm).toBeVisible();
     await menu.name.fill(userName);
     await menu.email.fill(userEmail);
     await menu.promotionCheckbox.check();
@@ -55,14 +55,14 @@ test.describe('Order new coffee: ', () => {
 
     await cart.cartPageButton.click();
 
-    await expect(menu.checkoutButton).toBeVisible();
+    await expect.soft(menu.checkoutButton).toBeVisible();
 
     for (let coffee of coffeeNamesList) {
-      await expect(cart.addCoffeeButtonCart(coffee)).toBeVisible();
+      await expect.soft(cart.addCoffeeButtonCart(coffee)).toBeVisible();
     }
 
     await menu.checkoutButton.click();
-    await expect(menu.paymentForm).toBeVisible();
+    await expect.soft(menu.paymentForm).toBeVisible();
     await menu.name.fill(userName);
     await menu.email.fill(userEmail);
     await menu.promotionCheckbox.check();
@@ -74,11 +74,11 @@ test.describe('Order new coffee: ', () => {
     page,
   }) => {
     await menu.espresso.click();
-    await expect(menu.checkoutButton).toContainText('Total: $10.00');
+    await expect.soft(menu.checkoutButton).toContainText('Total: $10.00');
     await menu.checkoutButton.hover();
-    await expect(menu.addNamedCoffee('Espresso')).toBeVisible();
+    await expect.soft(menu.addNamedCoffee('Espresso')).toBeVisible();
     await menu.addNamedCoffee('Espresso').click();
-    await expect(menu.checkoutButton).toContainText('Total: $20.00');
+    await expect.soft(menu.checkoutButton).toContainText('Total: $20.00');
     await menu.checkoutButton.click();
     await expect(menu.paymentForm).toBeVisible();
   });
@@ -87,9 +87,9 @@ test.describe('Order new coffee: ', () => {
     await menu.mocha.click({
       button: 'right',
     });
-    await expect(menu.addToCartModal).toBeVisible();
+    await expect.soft(menu.addToCartModal).toBeVisible();
     await menu.modalButtonYes.click();
-    await expect(menu.checkoutButton).toContainText('Total: $8.00');
+    await expect.soft(menu.checkoutButton).toContainText('Total: $8.00');
     await menu.mocha.click({
       button: 'right',
     });
@@ -99,17 +99,17 @@ test.describe('Order new coffee: ', () => {
 
   test('ISCS-5 - Promo Message', async ({ page }) => {
     await clickFewTimes(menu.cappuccino, 3, page);
-    await expect(menu.discountedMocha).toBeVisible();
-    await expect(menu.promotionButtonNo).toBeVisible();
-    await expect(menu.promotionButtonYes).toBeVisible();
+    await expect.soft(menu.discountedMocha).toBeVisible();
+    await expect.soft(menu.promotionButtonNo).toBeVisible();
+    await expect.soft(menu.promotionButtonYes).toBeVisible();
     await menu.promotionButtonNo.click();
     await menu.checkoutButton.hover();
-    await expect(menu.addNamedCoffee('Cappuccino')).toBeVisible();
+    await expect.soft(menu.addNamedCoffee('Cappuccino')).toBeVisible();
     await clickFewTimes(menu.mocha, 3, page);
-    await expect(menu.promotionButtonYes).toBeVisible();
+    await expect.soft(menu.promotionButtonYes).toBeVisible();
     await menu.promotionButtonYes.click();
     await menu.checkoutButton.hover();
-    await expect(menu.addNamedCoffee('(Discounted) Mocha')).toBeVisible();
+    await expect.soft(menu.addNamedCoffee('(Discounted) Mocha')).toBeVisible();
     await cart.cartPageButton.click();
     await expect(cart.addCoffeeButtonCart('(Discounted) Mocha')).toBeVisible();
     await expect(
