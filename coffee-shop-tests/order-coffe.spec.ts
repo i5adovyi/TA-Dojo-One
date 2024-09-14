@@ -73,29 +73,14 @@ test.describe('Order new coffee: ', () => {
   test('ISCS-3 - Ordering two espresso via hover on checkout button', async ({
     page,
   }) => {
-    await page.locator('[data-test="Espresso"]').click();
-    await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-    await expect(page.locator('[data-test="checkout"]')).toContainText(
-      'Total: $10.00'
-    );
-    await page.locator('[data-test="checkout"]').hover();
-    await expect(
-      page.locator(
-        '//*[@class="unit-controller"]/button[@aria-label="Add one Espresso"]'
-      )
-    ).toBeVisible();
-    await page
-      .locator(
-        '//*[@class="unit-controller"]/*[@aria-label="Add one Espresso"]'
-      )
-      .click();
-    await expect(page.locator('[data-test="checkout"]')).toContainText(
-      'Total: $20.00'
-    );
-    await page.locator('[data-test="checkout"]').click();
-    await expect(
-      page.locator('//form[@aria-label="Payment form"]')
-    ).toBeVisible();
+    await menu.espresso.click();
+    await expect(menu.checkoutButton).toContainText('Total: $10.00');
+    await menu.checkoutButton.hover();
+    await expect(menu.addNamedCoffee('Espresso')).toBeVisible();
+    await menu.addNamedCoffee('Espresso').click();
+    await expect(menu.checkoutButton).toContainText('Total: $20.00');
+    await menu.checkoutButton.click();
+    await expect(menu.paymentForm).toBeVisible();
   });
 
   test('ISCS-4 - Right click on Mocha', async ({ page }) => {
