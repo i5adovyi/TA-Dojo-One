@@ -1,7 +1,8 @@
 import { Locator, Page } from '@playwright/test';
+import { coffeeLocator } from './helpers';
 
 //Main Menu Page Locators
-export const getCoffeeLocators = (page: Page) => {
+export const menuPageLocators = (page: Page) => {
   //Locators generator
 
 
@@ -18,7 +19,7 @@ export const getCoffeeLocators = (page: Page) => {
     // cafeLatte: getCoffeeLocator('Cafe Latte', page),
     // espressoConPanna: getCoffeeLocator('Espresso Con Panna', page),
     // cafeBreve: getCoffeeLocator('Cafe Breve', page),
-    // discountedMocha: getCoffeeLocator('(Discounted) Mocha', page),
+     discountedMocha: coffeeLocator('(Discounted) Mocha', page),
 
     //payment form
     paymentForm: page.locator('[aria-label="Payment form"]'),

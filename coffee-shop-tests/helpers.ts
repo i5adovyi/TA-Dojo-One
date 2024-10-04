@@ -12,12 +12,19 @@ export const clickFewTimes = async (
   }
 };
 
-const getCoffeeLocator = (coffeeName: string, page: Page): Locator => {
+export const coffeeLocator = (coffeeName: string, page: Page): Locator => {
   return page.locator(
     `//*[@aria-label="${coffeeName}" and contains(@class, 'cup-body')]`
   );
 };
 
-export const clickOnCup = (coffeeName: string, page: Page) => {
-  return getCoffeeLocator(coffeeName, page).click();
+
+export const clickOnCup = async (coffeeName: string, page: Page) => {
+  const locator = coffeeLocator(coffeeName, page);
+  try {
+    await locator.click({ timeout: 200 }); // Timeout can be adjusted as needed
+    console.log(`Clicked on ${coffeeName}`);
+  } catch (error) {
+    console.error(`Failed to click on ${coffeeName}:`, error);
+  }
 };
