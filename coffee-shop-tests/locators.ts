@@ -1,26 +1,25 @@
 import { Locator, Page } from '@playwright/test';
+import { coffeeLocator } from './helpers';
 
 //Main Menu Page Locators
-export const getCoffeeLocators = (page: Page) => {
+export const menuPageLocators = (page: Page) => {
   //Locators generator
-  const getCoffeeLocator = (coffeeName: string, page: Page): Locator => {
-    return page.locator(
-      `//*[@aria-label="${coffeeName}" and contains(@class, 'cup-body')]`
-    );
-  };
+
+
+
 
   return {
     // list of coffee
-    espresso: getCoffeeLocator('Espresso', page),
-    espressoMacchiato: getCoffeeLocator('Espresso Macchiato', page),
-    cappuccino: getCoffeeLocator('Cappuccino', page),
-    mocha: getCoffeeLocator('Mocha', page),
-    flatWhite: getCoffeeLocator('Flat White', page),
-    americano: getCoffeeLocator('Americano', page),
-    cafeLatte: getCoffeeLocator('Cafe Latte', page),
-    espressoConPanna: getCoffeeLocator('Espresso Con Panna', page),
-    cafeBreve: getCoffeeLocator('Cafe Breve', page),
-    discountedMocha: getCoffeeLocator('(Discounted) Mocha', page),
+    // espresso: getCoffeeLocator('Espresso', page),
+    // espressoMacchiato: getCoffeeLocator('Espresso Macchiato', page),
+    // cappuccino: getCoffeeLocator('Cappuccino', page),
+    // mocha: getCoffeeLocator('Mocha', page),
+    // flatWhite: getCoffeeLocator('Flat White', page),
+    // americano: getCoffeeLocator('Americano', page),
+    // cafeLatte: getCoffeeLocator('Cafe Latte', page),
+    // espressoConPanna: getCoffeeLocator('Espresso Con Panna', page),
+    // cafeBreve: getCoffeeLocator('Cafe Breve', page),
+     discountedMocha: coffeeLocator('(Discounted) Mocha', page),
 
     //payment form
     paymentForm: page.locator('[aria-label="Payment form"]'),
@@ -76,3 +75,15 @@ export function cartPageLocators(page: Page) {
       ),
   };
 }
+
+export const coffeeMenuList = {
+  espresso: 'Espresso',
+  espressoMacchiato: 'Espresso Macchiato',
+  cappuccino: 'Cappuccino',
+  mocha: 'Mocha',
+  flatWhite: 'Flat White',
+  americano: 'Americano',
+  cafeLatte: 'Cafe Latte',
+  espressoConPanna: 'Espresso Con Panna',
+  cafeBreve: 'Cafe Breve',
+};
