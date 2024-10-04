@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+// ДЗ №8
+// ДЗ  #ifelse #unittests
 
 function isPositive(number) {
   if (typeof number === 'number') {
@@ -159,18 +161,128 @@ test('is equal - float', async () => {
 });
 
 test('a is not a number', async () => {
-  expect(() => isGreater('dod', 1)).toThrowError('Please use numbers for input');
+  expect(() => isGreater('dod', 1)).toThrowError(
+    'Please use numbers for input'
+  );
 });
 
 test('b is not a number', async () => {
-  expect(() => isGreater(1, 'dod')).toThrowError('Please use numbers for input');
-})
-
+  expect(() => isGreater(1, 'dod')).toThrowError(
+    'Please use numbers for input'
+  );
+});
 
 // ДЗ №9
-// Цикли 
+// Цикли
 // - Виведіть в консоль числа від 1 до 345 (while)
+
+let list = (start, end) => {
+  while (start <= end) {
+    console.log(start);
+    start++;
+  }
+};
+list(1, 345);
 // - Знайти суму чисел від 1 до 100 (тобто  1 + 2 + 3 + 4 + 5 + 6....)
+
+let sum = (start, end) => {
+  let total = 0;
+  for (let i = start; i <= end; i++) {
+    total += i;
+  }
+  console.log(total);
+  return total;
+  
+};
+
+sum(1, 100)
+
 // - Виведіть в консоль числа від 241  до 1 (do while)
+let sequence = (start, end) => {
+  do {
+    console.log(start--)
+  } while (start >= end)
+};
+
+sequence(245, 1);
+
 // - Напишіть програму  яка відображає найбільше ціле число з двох цілих чисел. (if.. + покрийте тестами)
 
+/* The text you provided seems to be a homework assignment related to JavaScript arrays and methods. It
+includes two tasks: */
+// ДЗ №10
+
+// ДЗ  #array
+
+// Завдання 1
+
+// Дано масив міст, використовуючи метод map(), поверніть/створіть масив, який включатиме всі міста, у яких лише перша літера кожної назви міста написана з великої літери.
+
+// Завдання 2
+
+// Використовуючи цикл forEach(), console.log записує назви всіх елементів у масиві citiesCapitalized, включаючи число, яке представляє позицію елемента, починаючи з 1 для першого (індексного) елемента.
+
+// Array of cities
+
+const cities = [
+  'miami',
+  'barcelona',
+  'madrid',
+  'amsterdam',
+  'berlin',
+  'sao paulo',
+  'lisbon',
+  'mexico city',
+  'paris',
+];
+
+// Task 1
+const citiesCapitalized = cities.map(
+  (city) => city.charAt(0).toUpperCase() + city.slice(1)
+);
+console.log(citiesCapitalized);
+
+const capitalizeWords = (str) => {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Оновлений `map` із використанням `capitalizeWords`
+const capitalizedCities = cities.map(capitalizeWords);
+console.log(capitalizedCities);
+
+/* Expected Ouput: 
+[
+  "Miami",
+  "Barcelona",
+  "Madrid",
+  "Amsterdam",
+  "Berlin",
+  "Sao paulo",
+  "Lisbon",
+  "Mexico city",
+  "Paris"
+ ];
+*/
+
+// Task 2
+
+cities.forEach((city, index) => {
+  console.log(`${index + 1}. ${city.charAt(0).toUpperCase() + city.slice(1)}`);
+});
+
+/* Expected Ouput: 
+[
+  "1. Miami",
+  "2. Barcelona",
+  "3. Madrid",
+  "4. Amsterdam",
+  "5. Berlin",
+  "6. Sao paulo",
+  "7. Lisbon",
+  "8. Mexico city",
+  "9. Paris"
+ ];
+ */

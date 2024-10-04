@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 import { clickFewTimes } from './helpers';
-import { cartPageLocators, getCoffeeLocators } from './locators';
+import { cartPageLocators, getCoffeeLocators, clickOnCup } from './locators';
 
 let menu: ReturnType<typeof getCoffeeLocators>;
 let cart: ReturnType<typeof cartPageLocators>;
@@ -26,8 +26,9 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Order new coffee: ', () => {
   test('ISCS-1 - Order espresso', async ({ page }) => {
-    await expect.soft(menu.espresso).toBeVisible();
-    await menu.espresso.click();
+    await expect.soft(getCoffeeLocator('Espresso', page).toBeVisible();
+    //await menu.espresso.click();
+    await clickOnCup('Espresso', page);
     await menu.checkoutButton.click();
     await expect.soft(menu.paymentForm).toBeVisible();
     await menu.name.fill(userName);

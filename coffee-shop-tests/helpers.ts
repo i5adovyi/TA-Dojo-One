@@ -2,6 +2,7 @@ import { Locator, Page } from '@playwright/test';
 
 export const clickFewTimes = async (
   locator: Locator,
+
   count: number,
   page: Page
 ) => {
@@ -11,4 +12,12 @@ export const clickFewTimes = async (
   }
 };
 
+const getCoffeeLocator = (coffeeName: string, page: Page): Locator => {
+  return page.locator(
+    `//*[@aria-label="${coffeeName}" and contains(@class, 'cup-body')]`
+  );
+};
 
+export const clickOnCup = (coffeeName: string, page: Page) => {
+  return getCoffeeLocator(coffeeName, page).click();
+};

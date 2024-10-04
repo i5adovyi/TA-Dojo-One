@@ -1,17 +1,39 @@
 {
   "name": "ta-dojo-one",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "ts-node ./tests/js-practice/human.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.46.1",
-    "@types/node": "^22.4.1"
-  },
   "dependencies": {
-    "@faker-js/faker": "^9.0.0"
-  }
+    "@faker-js/faker": "^9.0.0",
+    "node-fetch": "^2.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@playwright/test": "^1.47.2",
+    "@types/node": "^22.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.28.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-mocha": "^10.0.5",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "faker": "^6.6.6",
+    "globals": "^15.10.0",
+    "node-fetch": "^3.3.2",
+    "prettier": "^2.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.0"
+  },
+  "type": "module",
+  "description": ""
 }
