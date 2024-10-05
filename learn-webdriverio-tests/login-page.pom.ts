@@ -6,12 +6,8 @@ export abstract class BasePage {
     this.page = page;
   }
 
-  public click() {
-    this.page.locator('').click();
-  }
-
-  public navigate(url: string) {
-    this.page.goto(url);
+  public async navigate(url: string) {
+    await this.page.goto(url);
   }
 }
 
