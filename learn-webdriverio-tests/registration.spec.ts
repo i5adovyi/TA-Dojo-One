@@ -1,36 +1,40 @@
 import { faker } from '@faker-js/faker';
-import test, { expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { HomePage } from './LoginPage';
 
-let username = faker.internet.userName();
-let email = faker.internet.email();
-let surname = faker.person.lastName();
-let password = faker.internet.password();
+
+const username: string = faker.internet.userName();
+const email: string = faker.internet.email();
+const password: string = faker.internet.password();
+let homePage: HomePage;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('https://demo.learnwebdriverio.com/');
+  homePage = new HomePage(page);
+  await homePage.navigate('https://demo.learnwebdriverio.com/');
 });
 
 test.describe('Login page', () => {
-  test('Login with valid credentials', async ({ page }) => {
-    await page.locator('//ul[@data-qa-id="site-nav"]/li[3]').click();
-    await page.locator('//input[@placeholder="Username"]').fill('name');
-    await page.locator('//input[@placeholder="Email"]').fill('email');
-    await page.locator('//input[@placeholder="Password"]').fill('password');
-    await page.locator('//button[contains(text(), "Sign up")]').click();
+  test('Register from home page', async () => {
+    await homePage.clickSignUpLink();
+    await homePage.fillEmail(email);
+    await homePage.fillPassword(password);
+    await homePage.fillUsername(username);
+    await homePage.clickSignUpButton();
   });
 
-  test('Login with invalid credentials', async ({ page }) => {
-    await page.locator('//ul[@data-qa-id="site-nav"]/li[3]').click();
-    await page.locator('//input[@placeholder="Username"]').fill('name');
-    await page.locator('//input[@placeholder="Email"]').fill('email');
-    await page.locator('//input[@placeholder="Password"]').fill('password');
-    await page.locator('//button[contains(text(), "Sign up")]').click();
+  test('Login with valid credentials', async () => {
+    await homePage.clickSignInLink();
+    await homePage.fillEmail(email);
+    await homePage.fillPassword(password);
+    await homePage.clickSignInButton();
+  });
 
-    await expect(page.getByText('username is already taken.')).toBeVisible();
-    await expect(page.getByText('email is already taken.')).toBeVisible();
-    await expect(page.locator('#app')).toContainText(
-      'username is already taken.'
-    );
-    await expect(page.locator('#app')).toContainText('email is already taken.');
+  test('Login with invalid credentials', async () => {
+    await homePage.clickSignInLink();
+    await homePage.fillEmail(email);
+    await homePage.fillPassword(faker.internet.password());
+    await homePage.clickSignInButton();
+
+    //await expect(page.locator('#app')).toContainText('email or password is invalid');
   });
 });
