@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
-import { HomePage } from './login-page.pom';
+import { HomePage } from './LoginPage';
+
 
 const username: string = faker.internet.userName();
 const email: string = faker.internet.email();
@@ -14,7 +15,6 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Login page', () => {
   test('Register from home page', async () => {
-     //homePage = new HomePage(page);
     await homePage.clickSignUpLink();
     await homePage.fillEmail(email);
     await homePage.fillPassword(password);
@@ -23,7 +23,6 @@ test.describe('Login page', () => {
   });
 
   test('Login with valid credentials', async () => {
-    //const homePage = new HomePage(page);
     await homePage.clickSignInLink();
     await homePage.fillEmail(email);
     await homePage.fillPassword(password);
@@ -31,7 +30,6 @@ test.describe('Login page', () => {
   });
 
   test('Login with invalid credentials', async () => {
-    //const homePage = new HomePage(page);
     await homePage.clickSignInLink();
     await homePage.fillEmail(email);
     await homePage.fillPassword(faker.internet.password());
