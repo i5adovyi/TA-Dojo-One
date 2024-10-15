@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { Page } from '@playwright/test';
-import { HomePageLocators } from './LoginPageLocators';
+import { HomePageLocators } from './HomePageLocators';
 
 export abstract class BasePage {
-  protected page: Page;
+  readonly page: Page;
   constructor(page: Page) {
     this.page = page;
   }
@@ -14,7 +14,7 @@ export abstract class BasePage {
 }
 
 export class HomePage extends BasePage {
-  private locators: HomePageLocators;
+  readonly locators: HomePageLocators;
   constructor(page: Page) {
     super(page);
     this.locators = new HomePageLocators(page);
@@ -48,6 +48,14 @@ export class HomePage extends BasePage {
     await this.locators.usernameInput.fill(username);
   }
 
+  async clickNewArticleLink() {
+    await this.locators.newArticleLink.click();
+  }
+
+  async clickSettingsLink() {
+    await this.locators.settingsLink.click();
+  }
+
   async fillInAllFields({
     email = faker.internet.email(),
     username = faker.internet.userName(),
@@ -56,23 +64,9 @@ export class HomePage extends BasePage {
     email?: string;
     username?: string;
     password?: string;
-  }) { 
+  }) {
     await this.fillEmail(email);
     await this.fillUsername(username);
     await this.fillPassword(password);
-  }
-
-  async fillInAllFields2({
-    email,
-    userName,
-    password,
-  }: {
-    email?: string;
-    userName?: string;
-    password?: string;
-  }) {
-    await this.fillEmail(email ? email : faker.internet.email());
-    await this.fillUsername(userName ? userName : faker.internet.userName());
-    await this.fillPassword(password ? password : faker.internet.password());
   }
 }

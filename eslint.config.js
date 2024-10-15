@@ -15,4 +15,9 @@ export default [
       'no-undef': 'warn',
     },
   },
+  {
+    env: {
+      node: true,
+    },
+  },
 ];
