@@ -34,6 +34,11 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'Rozetka',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: 'rozetka-tests',
+    },
+    {
       name: 'Coffee Cart',
       use: { ...devices['Desktop Chrome'] },
       testDir: 'coffee-shop-tests',
