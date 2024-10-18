@@ -1,7 +1,14 @@
 import { faker } from '@faker-js/faker';
 
+// export const userData = {
+//   getEmail: () => faker.internet.email({ lastName: 'test', provider: 'example.com' }),
+//   getUsername: () => faker.person.firstName(),
+//   getPassword: () => faker.internet.password(),
+// };
+
+
 export const userData = {
-  email: faker.internet.email(),
-  username: faker.person.firstName(),
-  password: faker.internet.password(),
+  getEmail: () => faker.internet.email({ lastName: 'test', provider: 'example.com' }),
+  getUsername: () => faker.person.firstName(),
+  getPassword: () => faker.internet.password(),
 };

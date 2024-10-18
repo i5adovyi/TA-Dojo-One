@@ -1,13 +1,19 @@
 import { test as base } from '@playwright/test';
 import { config } from 'dotenv';
-import { HomePage } from '../src/HomePage';
+import { ArticlePage } from '../src/article-page/ArticlePage';
+import { EditorPage } from '../src/editor-page/EditorPage';
+import { HomePage } from '../src/home-page/HomePage';
 
 // Load environment variables from .env file
 config();
 
 export const test = base.extend<{
   homePage: HomePage;
-  userLoggedIn: HomePage;
+  userLoggedIn: {
+    homePage: HomePage;
+    editorPage: EditorPage;
+    articlePage: ArticlePage;
+  };
 }>({
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);
@@ -16,19 +22,21 @@ export const test = base.extend<{
   },
 
   userLoggedIn: async ({ page }, use) => {
-    const userLoggedIn = new HomePage(page);
+    const homePage = new HomePage(page);
+    const editorPage = new EditorPage(page);
+    const articlePage = new ArticlePage(page);
 
     // Extract environment variables
     const email = process.env.EMAIL!;
     const password = process.env.PASSWORD!;
 
     // Navigate to login page and perform login
-    await userLoggedIn.navigate('https://demo.learnwebdriverio.com/login');
-    await userLoggedIn.fillEmail(email);
-    await userLoggedIn.fillPassword(password);
-    await userLoggedIn.clickSignInButton();
+    await homePage.navigate('https://demo.learnwebdriverio.com/login');
+    await homePage.fillEmail(email);
+    await homePage.fillPassword(password);
+    await homePage.clickSignInButton();
 
     // Use the logged-in user page in tests
-    await use(userLoggedIn);
+    await use({ homePage, editorPage, articlePage });
   },
 });
