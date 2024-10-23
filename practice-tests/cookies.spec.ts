@@ -38,7 +38,7 @@ test('Cookies in telemart', async ({ page, context }) => {
   );
   console.log('Newly added cookie:', newCookie);
 
-  // Перевірити, чи кукі знайдена і має правильне значення
+  // Перевірити, чи кукі знайдена і має правильне значення            
   if (newCookie) {
     expect(newCookie.value).toBe('bestSong');
   } else {
