@@ -39,6 +39,11 @@ export default defineConfig({
       testDir: 'rozetka-tests',
     },
     {
+      name: 'Practicing',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: 'practice-tests',
+    },
+    {
       name: 'Coffee Cart',
       use: { ...devices['Desktop Chrome'] },
       testDir: 'coffee-shop-tests',
