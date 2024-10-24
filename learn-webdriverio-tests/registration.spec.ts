@@ -1,13 +1,14 @@
 import { expect } from '@playwright/test';
-import { loggedInTest } from './fixtures/baseFixture';
+import { guestUserTest } from './fixtures/guest-user-fixture';
+import { loggedInTest } from './fixtures/logged-in-fixture';
 import { userData } from './src/userData';
 
 const email = userData.getEmail();
 // const password = userData.getPassword();
 const username = userData.getUsername();
 
-loggedInTest.describe('User registration and actions', () => {
-  loggedInTest('Register a new user', async ({ homePage }) => {
+guestUserTest.describe('User registration and actions', () => {
+  guestUserTest('Register a new user', async ({ homePage }) => {
     await homePage.navigate('https://demo.learnwebdriverio.com/');
     await homePage.clickSignUpLink();
     await homePage.fillEmail(email);
@@ -18,7 +19,7 @@ loggedInTest.describe('User registration and actions', () => {
     await expect(homePage.locators.settingsLink).toBeVisible();
   });
 
-  loggedInTest('Login with newly created user', async ({ homePage }) => {
+  guestUserTest('Login with newly created user', async ({ homePage }) => {
     await homePage.navigate('https://demo.learnwebdriverio.com/');
     await homePage.clickSignInLink();
     await homePage.fillEmail(email);
@@ -31,11 +32,12 @@ loggedInTest.describe('User registration and actions', () => {
     await expect(homePage.locators.newArticleLink).toBeVisible();
     await expect(homePage.locators.settingsLink).toBeVisible();
   });
+});
 
+loggedInTest.describe('User actions', () => {
   loggedInTest(
     'Accessing dashboard as logged-in user',
     async ({ homePage }) => {
-      // Перевірка доступності елементів на залогованій домашній сторінці
       await expect(homePage.locators.yourFeedTab).toBeVisible();
       await expect(homePage.locators.newArticleLink).toBeVisible();
       await expect(homePage.locators.settingsLink).toBeVisible();
@@ -45,7 +47,6 @@ loggedInTest.describe('User registration and actions', () => {
   loggedInTest(
     'Add new article',
     async ({ homePage, editorPage, articlePage }) => {
-      await homePage.navigate('https://demo.learnwebdriverio.com/');
       await homePage.clickNewArticleLink();
       await editorPage.fillTitle('New article');
       await editorPage.fillDescription('New article description');
