@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 import { MenuLocators } from './menu-locators';
 
+
 export class BasePage {
   readonly page: Page;
   constructor(page: Page) {
