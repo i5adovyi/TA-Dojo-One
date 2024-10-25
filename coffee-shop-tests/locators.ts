@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { coffeeLocator } from './helpers';
+import { coffeeLocator } from './src/helpers/helpers';
 
 //Main Menu Page Locators
 export const menuPageLocators = (page: Page) => {
