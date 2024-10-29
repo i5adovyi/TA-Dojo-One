@@ -5,7 +5,7 @@ test('Search in rozetka', async ({ page }) => {
   await page.waitForLoadState('load');
   await page.waitForSelector('#rz-banner');
   await page.click('//*[@id="rz-banner"]//span[@class="exponea-close-cross"]');
-  await page.locator('//input[@name="search"]').fill('iphone');
+  await page.locator('//input[@name="search"]').fill('iPhone');
   // Wait for the search button using the corrected XPath
   await page.waitForSelector(
     '//*[@class="header-search"]//button[contains(@class, "button") and contains(@class, "search-form__submit")]'
@@ -17,24 +17,22 @@ test('Search in rozetka', async ({ page }) => {
   );
 
   const searchResult = page
-    .locator(
-      `//li[contains(@class, "catalog-grid")]//a[contains(@class, 'goods-tile__picture')]`
-    )
+    .locator(`//*[@class="catalog-grid ng-star-inserted"]/li`)
     .first();
 
-  expect(searchResult.getAttribute('title')).toContain('iphone');
+  await expect(searchResult).toContainText('Apple iPhone');
 });
 
 const testData = [
   {
     testId: 'MONE-001',
-    searchQuery: 'Монітори',
-    searchResultWord: 'Монітор',
+    searchQuery: 'Ноутбук',
+    searchResultWord: 'Ноутбук',
   },
   {
     testId: 'MONE-002',
-    searchQuery: "Комп'ютерна мишка",
-    searchResultWord: "Комп'ютерна мишка",
+    searchQuery: 'Моноблок',
+    searchResultWord: 'Моноблок',
   },
 ];
 
@@ -44,19 +42,28 @@ for (const data of testData) {
       page,
     }) => {
       await page.goto('https://rozetka.com.ua/ua/');
+      await page.waitForLoadState('load');
+      await page.waitForSelector('#rz-banner');
+      await page.click('//*[@id="rz-banner"]//span[@class="exponea-close-cross"]');
       await page.locator(`//input[@name="search"]`).fill(data.searchQuery);
 
-      await page.keyboard.press('Enter');
+      // await page.keyboard.press('Enter');
+      await page.click(
+        '//*[@class="header-search"]//button[contains(@class, "button") and contains(@class, "search-form__submit")]'
+      );
+      await page.waitForLoadState('load');
+      await page.waitForSelector(
+        '//*[@class="catalog-heading ng-star-inserted"]'
+      );
+
+      await expect.soft(
+        page.locator('//*[@class="catalog-heading ng-star-inserted"]')
+      ).toContainText(data.searchResultWord);
 
       const searchResult = page
-        .locator(
-          `//li[contains(@class, "catalog-grid")]//a[contains(@class, 'goods-tile__picture')]`
-        )
-        .first();
+        .locator(`//*[@class="catalog-grid ng-star-inserted"]/li[1]`)
 
-      expect(searchResult.getAttribute('title')).toContain(
-        data.searchResultWord
-      );
+      await expect(searchResult).toContainText(data.searchResultWord);
     });
   });
 }
